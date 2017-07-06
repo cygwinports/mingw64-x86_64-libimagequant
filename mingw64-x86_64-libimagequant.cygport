@@ -1,0 +1,27 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross
+
+NAME="mingw64-x86_64-libimagequant"
+VERSION=2.10.0
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="Image Quantization Library for Win64 toolchain"
+DESCRIPTION="Small, portable C library for high-quality conversion of RGBA
+images to 8-bit indexed-color (palette) images."
+HOMEPAGE="https://pngquant.org/lib/"
+SRC_URI="https://github.com/ImageOptim/libimagequant/archive/${VERSION}/libimagequant-${VERSION}.tar.gz"
+SRC_DIR="libimagequant-${VERSION}"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	./configure --prefix=${CROSS_PREFIX}
+	cygmake dll DLLIMP=libimagequant.dll.a
+}
+
+src_install() {
+	cd ${B}
+	dobin imagequant.dll
+	doinclude libimagequant.h
+	dolib libimagequant.dll.a
+}
